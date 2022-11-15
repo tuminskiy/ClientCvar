@@ -23,7 +23,7 @@ public plugin_init()
 public CmdGetClientCvar(const id, const lvl, const cid)
 {
   if (!cmd_access(id, lvl, cid, 3, false) || read_argc() < 3) {
-    return 0;
+    return PLUGIN_CONTINUE;
   }
 
   static szTarget[MAX_TARGET_LENGTH + 1];
@@ -31,7 +31,7 @@ public CmdGetClientCvar(const id, const lvl, const cid)
 
   new const iTarget = cmd_target(id, szTarget, CMDTARGET_ALLOW_SELF);
   if (!iTarget) {
-    return 0;
+    return PLUGIN_HANDLED;
   }
 
   static szCvar[MAX_CVAR_LENGTH + 1];
@@ -44,7 +44,7 @@ public CmdGetClientCvar(const id, const lvl, const cid)
 
   query_client_cvar(iTarget, szCvar, "CmdGetClientCvar_Callback", 1, iParams);
 
-  return 0;
+  return PLUGIN_HANDLED;
 }
 
 public CmdGetClientCvar_Callback(const iTarget, const szCvar[], const szValue[], const iParams[])
@@ -54,18 +54,18 @@ public CmdGetClientCvar_Callback(const iTarget, const szCvar[], const szValue[],
   LogResultGetClientCvar(iCmdUserId, iTarget, szCvar, szValue);
 
   if (equal(szValue, "Bad CVAR request", MAX_CVAR_LENGTH)) {
-    console_print(iCmdUserId, "Client %s (%s) doesn't have %s cvar",
+    console_print(iCmdUserId, "Client %s (%s) doesn't have %s cvar^n",
       g_ePlayer[iTarget][Nickname], g_ePlayer[iTarget][AuthId],
       szCvar
     );
   } else {
-    console_print(iCmdUserId, "Client %s (%s) has %s %s",
+    console_print(iCmdUserId, "Client %s (%s) has %s %s^n",
       g_ePlayer[iTarget][Nickname], g_ePlayer[iTarget][AuthId],
       szCvar, szValue
     );
   }
 
-  return 0;
+  return PLUGIN_HANDLED;
 }
 
 

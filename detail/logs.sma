@@ -31,8 +31,6 @@ LogsInit()
 LogInfo(const szText[])
 {
   Log2File(g_szInfoLogsPath, szText);
-
-  return 0;
 }
 
 LogError(const LogErrorType:iType, const szText[])
@@ -48,8 +46,6 @@ LogError(const LogErrorType:iType, const szText[])
     }
     default: { }
   }
-  
-  return 0;
 }
 
 Log2File(const szFilePath[], const szText[])
@@ -60,6 +56,4 @@ Log2File(const szFilePath[], const szText[])
   add(szLog, 255, szText, 234);
 
   write_file(szFilePath, szLog);
-
-  return 0;
 }
