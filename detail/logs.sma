@@ -19,13 +19,13 @@ LogsInit()
   format(g_szErrorLogsPath, MAX_LOGS_PATH_LENGTH, "%s/client_cvar_error_v%s.log", g_szErrorLogsPath, VERSION);
   format(g_szInfoLogsPath, MAX_LOGS_PATH_LENGTH, "%s/client_cvar_info_v%s.log", g_szInfoLogsPath, VERSION);
 
-	if (!is_dedicated_server()) {
-		LogError(iLogCritical, "ERROR: Server must be dedicated!");
-	}
+  if (!is_dedicated_server()) {
+    LogError(LogErrorType:iLogCritical, "ERROR: Server must be dedicated!");
+  }
 
-	if (!is_running("cstrike")) {
-		LogError(iLogCritical, "ERROR: Server must be running cstrike mod!");
-	}
+  if (!is_running("cstrike")) {
+    LogError(LogErrorType:iLogCritical, "ERROR: Server must be running cstrike mod!");
+  }
 }
 
 LogInfo(const szText[])
@@ -37,19 +37,19 @@ LogInfo(const szText[])
 
 LogError(const LogErrorType:iType, const szText[])
 {
-	Log2File(g_szErrorLogsPath, szText);
+  Log2File(g_szErrorLogsPath, szText);
 
-	switch (iType) {
-		case iLogWarning: {
-			server_print("[ClientCvar] %s", szText);
-		}
-		case iLogCritical: {
-			set_fail_state(szText);
-		}
-		default: { }
-	}
+  switch (iType) {
+    case iLogWarning: {
+      server_print("[ClientCvar] %s", szText);
+    }
+    case iLogCritical: {
+      set_fail_state(szText);
+    }
+    default: { }
+  }
   
-	return 0;
+  return 0;
 }
 
 Log2File(const szFilePath[], const szText[])

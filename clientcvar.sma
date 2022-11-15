@@ -13,59 +13,59 @@
 
 public plugin_init()
 {
-	register_plugin(PLUGIN, VERSION, AUTHOR);
+  register_plugin(PLUGIN, VERSION, AUTHOR);
   
   LogsInit();
   
-  register_concmd("gcc", "CmdGetClientCvar", ADMIN_BAN, "<name or #userid> <cvar>", -1, MaxClients);
+  register_concmd("gcc", "CmdGetClientCvar", ADMIN_BAN, "<name or #userid> <cvar>", -1, false);
 }
 
 public CmdGetClientCvar(const id, const lvl, const cid)
 {
-	if (!cmd_access(id, lvl, cid, 3, false) || read_argc() < 3) {
-		return 1;
-	}
+  if (!cmd_access(id, lvl, cid, 3, false) || read_argc() < 3) {
+    return 0;
+  }
 
-	static szTarget[MAX_TARGET_LENGTH + 1];
-	read_argv(1, szTarget, MAX_TARGET_LENGTH);
+  static szTarget[MAX_TARGET_LENGTH + 1];
+  read_argv(1, szTarget, MAX_TARGET_LENGTH);
 
-	new const iTarget = cmd_target(id, szTarget, CMDTARGET_ALLOW_SELF);
-	if (!iTarget) {
-		return 1;
-	}
+  new const iTarget = cmd_target(id, szTarget, CMDTARGET_ALLOW_SELF);
+  if (!iTarget) {
+    return 0;
+  }
 
-	static szCvar[MAX_CVAR_LENGTH + 1];
-	read_argv(2, szCvar, MAX_CVAR_LENGTH);
+  static szCvar[MAX_CVAR_LENGTH + 1];
+  read_argv(2, szCvar, MAX_CVAR_LENGTH);
 
-	new iParams[1];
-	iParams[0] = id;
+  new iParams[1];
+  iParams[0] = id;
 
   LogCallGetClientCvar(id, iTarget, szCvar);
 
-	query_client_cvar(iTarget, szCvar, "CmdGetClientCvar_Callback", 1, iParams);
+  query_client_cvar(iTarget, szCvar, "CmdGetClientCvar_Callback", 1, iParams);
 
-	return 1;
+  return 0;
 }
 
 public CmdGetClientCvar_Callback(const iTarget, const szCvar[], const szValue[], const iParams[])
 {
-	new const iCmdUserId = iParams[0];
+  new const iCmdUserId = iParams[0];
 
   LogResultGetClientCvar(iCmdUserId, iTarget, szCvar, szValue);
 
-	if (equal(szValue, "Bad CVAR request", MAX_CVAR_LENGTH)) {
-		console_print(iCmdUserId, "Client %s (%s) doesn't have %s cvar",
+  if (equal(szValue, "Bad CVAR request", MAX_CVAR_LENGTH)) {
+    console_print(iCmdUserId, "Client %s (%s) doesn't have %s cvar",
       g_ePlayer[iTarget][Nickname], g_ePlayer[iTarget][AuthId],
       szCvar
     );
-	} else {
-		console_print(iCmdUserId, "Client %s (%s) has %s %s",
+  } else {
+    console_print(iCmdUserId, "Client %s (%s) has %s %s",
       g_ePlayer[iTarget][Nickname], g_ePlayer[iTarget][AuthId],
       szCvar, szValue
     );
-	}
+  }
 
-	return 0;
+  return 0;
 }
 
 
